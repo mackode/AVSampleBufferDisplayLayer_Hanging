@@ -134,6 +134,7 @@
     [self.videoLayer requestMediaDataWhenReadyOnQueue:renderQueue usingBlock: ^{
         NSLog(@">>!! 1. Request New Sample Buffer");
         while([self.videoLayer isReadyForMoreMediaData]) {
+            NSLog(@">>!! < videoLayer isReadyForMoreMediaData");
             CMSampleBufferRef sampleBuffer = NULL;
 
             @synchronized (self) {
@@ -161,16 +162,20 @@
                         }
                     }
                 }
-
-                if (([self.videoLayer firstSampleBufferEnqueued] == NO && keyFrame == YES) || [self.videoLayer firstSampleBufferEnqueued] == YES) {
-                    NSLog(@">>!! Enqueue Sample Buffer ...");
-                    [self.videoLayer enqueueSampleBuffer:sampleBuffer];
+                if ([self.videoLayer firstSampleBufferEnqueued] == NO && keyFrame == NO) {
+                    NSLog(@">>!! Waiting for a keyFrame in the first sample buffer. Skipped");
+                } else if (([self.videoLayer firstSampleBufferEnqueued] == NO && keyFrame == YES)) {
+                    NSLog(@">>|| Enqueue first sample buffer with key frame");
+                   [self.videoLayer enqueueSampleBuffer:sampleBuffer];
                     self.videoLayer.firstSampleBufferEnqueued = YES;
-                    NSLog(@">>!! < Enqueue");
+                    NSLog(@">>!! < Enqueued");
+                } else if ( [self.videoLayer firstSampleBufferEnqueued] == YES) {
+                    NSLog(@">>|| Enqueue next sample buffer");
+                    [self.videoLayer enqueueSampleBuffer:sampleBuffer];
+                    NSLog(@">>!! < Enqueued");
                 }
                 CFRelease(sampleBuffer);
             }
-            NSLog(@">>!! << Enqueue");
         }
         NSLog(@">>!! < Request New Sample Buffer");
     }];
