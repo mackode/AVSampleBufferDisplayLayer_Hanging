@@ -1,6 +1,6 @@
 # Issue description:
 
-AVSampleBufferDisplayLayer seems to hang on iOS 12.3.1 (>= iOS 12.2 is also affected) after 
+AVSampleBufferDisplayLayer seems to hang on iOS 12.3.1 (<iOS 12.2, iOS 13.0) is also affected) after 
 reboot. It looks that after 5 minutes everything works fine again.
 
 The issue is not reproducible on iOS 11.
