@@ -1,3 +1,7 @@
+## Note: this issue has been fixed in iOS 13 beta 7
+
+-----------------------------------------------------
+
 # Issue description:
 
 AVSampleBufferDisplayLayer seems to hang on iOS 12.3.1 (<iOS 12.2, iOS 13.0) is also affected) after 
